@@ -53,8 +53,9 @@ const CustomInput = ({
                 onKeyDown={onKeyDown}
                 value={value}
             />
+            <FormControl.Feedback />
             {touched && error &&
-                <HelpBlock style={{ color: 'red' }}>{getErrorMessage(errorMessages, error)}</HelpBlock>
+                <HelpBlock>{getErrorMessage(errorMessages, error)}</HelpBlock>
             }
    
         </FormGroup>
