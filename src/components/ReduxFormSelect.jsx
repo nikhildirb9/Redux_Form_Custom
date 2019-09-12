@@ -34,7 +34,7 @@ const ReduxFormSelect = ({
                     name={name}
                     value={value}
                     disabled={disabled}
-                    onBlur={() => { onBlur(option.value) }}
+                    onBlur={onBlur}
                     onChange={(option) => { onChange(option.value); }}
                     onFocus={onFocus}
                     options={options}
@@ -58,12 +58,12 @@ ReduxFormSelect.propTypes = {
     label: PropTypes.string,
     disabled: PropTypes.bool,
     name: PropTypes.string,
-    //options: PropTypes.arrayOf(PropTypes.shape({
-    //    value: PropTypes.oneOfType([
-    //        PropTypes.string,
-    //        PropTypes.number,
-    //    ]),
-    //})).isRequired,
+    options: PropTypes.arrayOf(PropTypes.shape({
+        value: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.number,
+        ]),
+    })).isRequired,
     errorMessage: PropTypes.string,
 };
 

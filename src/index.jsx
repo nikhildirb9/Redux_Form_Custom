@@ -1,13 +1,13 @@
 import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { Values } from "redux-form-website-template";
-import store from "./store";
-import showResults from "./showResults";
+import configureStore from "./configureStore";
 import UserForm from "./components/UserForm";
 import 'bootstrap/dist/css/bootstrap.css';
 
 const rootEl = document.getElementById("root");
+
+const store = configureStore();
 
 ReactDOM.render(
     <Provider store={store}>

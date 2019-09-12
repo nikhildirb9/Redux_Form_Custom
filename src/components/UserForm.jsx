@@ -1,8 +1,11 @@
 import React, { Fragment } from 'react';
+import { connect } from 'react-redux';
 import { Field, reduxForm, FormSection } from 'redux-form';
 import CustomInput from './CustomInput';
 import ReduxFormSelect from './ReduxFormSelect';
 import validator from 'validator';
+import { saveForm, setFormSubmittingFlag } from './UserActions';
+import { get } from 'lodash';
 
 const requiredError = "Please Enter Required Filed";
 
@@ -222,8 +225,17 @@ const email = value =>
         ? 'invalid'
         : undefined);
 
+const onSubmit = (values, dispatch) => {
+    dispatch(setFormSubmittingFlag(true));
+    //dispatch(saveFormValues(values));
+};
+
+const onSubmitFail = (errors, dispatch) => {
+    dispatch(setFormSubmittingFlag(false));
+};
+
 const UserForm = props => {
-    const { handleSubmit, pristine, reset, submitting } = props;
+    const { handleSubmit, pristine, reset, submitting, disableSubmit } = props;
     return (
         <Fragment>
         <form onSubmit={handleSubmit}>
@@ -281,12 +293,28 @@ const UserForm = props => {
                 <button type="button" disabled={pristine || submitting} onClick={reset}>
                     Clear Values
                 </button>
-            </div>
+                </div>
             </form>
             </Fragment>
     );
 };
 
-export default reduxForm({
-    form: 'userForm', // a unique identifier for this form
-})(UserForm);
+const mapStateToProps = (state) => ({
+    disableSubmit: get(state, 'user.disableSubmit', false),
+});
+
+const mapDispatchToProps = dispatch => ({
+    saveFormValues: val => dispatch(saveForm(val)),
+    setFormSubmittingFlag: val => dispatch(setFormSubmittingFlag(val)),
+});
+
+const UserContainer = connect(mapStateToProps, mapDispatchToProps)(reduxForm({
+    form: 'userForm',
+    onSubmit,
+    onSubmitFail,
+    destroyOnUnmount: false,
+    forceUnregisterOnUnmount: true,
+})(UserForm));
+
+export default UserContainer;
+
