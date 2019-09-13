@@ -4,7 +4,7 @@ import { Field, reduxForm, FormSection, formValueSelector } from 'redux-form';
 import CustomInput from './CustomInput';
 import ReduxFormSelect from './ReduxFormSelect';
 import validator from 'validator';
-import { saveForm, setFormSubmittingFlag, postalCodeLookup } from './UserActions';
+import { saveForm, setFormSubmittingFlag, postalCodeLookup, clearCityStateValues } from './UserActions';
 import { get } from 'lodash';
 import { stateList } from './utils';
 
@@ -40,7 +40,7 @@ const onSubmitFail = (errors, dispatch) => {
 };
 
 const UserForm = props => {
-    const { handleSubmit, pristine, reset, submitting, getCityState, zipCode, disableSubmit } = props;
+    const { handleSubmit, pristine, reset, submitting, getCityState, zipCode, clearCityState, disableSubmit } = props;
     return (
         <Fragment>
         <form onSubmit={handleSubmit}>
@@ -92,6 +92,7 @@ const UserForm = props => {
                             }}
                             label="Zip Code"
                             controlId="zip"
+                            onChange={() => { clearCityState();}}
                             onBlur={() => { getCityState(zipCode); }}
                         />
                     </div>
@@ -140,6 +141,7 @@ const mapDispatchToProps = dispatch => ({
     saveFormValues: val => dispatch(saveForm(val)),
     setFormSubmittingFlag: val => dispatch(setFormSubmittingFlag(val)),
     getCityState: val => dispatch(postalCodeLookup(val)),
+    clearCityState: () => dispatch(clearCityStateValues()),
 });
 
 const UserContainer = connect(mapStateToProps, mapDispatchToProps)(reduxForm({

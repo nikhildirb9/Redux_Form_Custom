@@ -17,6 +17,11 @@ const fetchCityStateDetails = (data) => (dispatch) => {
     dispatch(change('userForm', `state`, data.state));
 };
 
+export const clearCityStateValues = () => (dispatch) => {
+    dispatch(change('userForm', `city`, null));
+    dispatch(change('userForm', `state`, null));
+};
+
 
 export const postalCodeLookup = (postalCode) => (dispatch) => {
     return axios.get(`http://ziptasticapi.com/${postalCode}`)

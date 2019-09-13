@@ -27,8 +27,7 @@ export default function configureStore(initialState) {
     const store = createStore(
         persistedReducer,
         initialState,
-        applyMiddleware(thunk),
-        composeEnhancers(),
+        composeEnhancers(applyMiddleware(thunk)),
     );
     persistor = persistStore(store);
 
