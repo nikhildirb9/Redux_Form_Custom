@@ -1,4 +1,5 @@
-import { combineReducers, createStore, compose } from 'redux';
+import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { reducer as formReducer } from 'redux-form';
 import { persistStore, persistReducer } from 'redux-persist';
@@ -26,6 +27,7 @@ export default function configureStore(initialState) {
     const store = createStore(
         persistedReducer,
         initialState,
+        applyMiddleware(thunk),
         composeEnhancers(),
     );
     persistor = persistStore(store);

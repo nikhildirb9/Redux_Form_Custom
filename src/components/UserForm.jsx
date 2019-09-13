@@ -1,217 +1,18 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm, FormSection } from 'redux-form';
+import { Field, reduxForm, FormSection, formValueSelector } from 'redux-form';
 import CustomInput from './CustomInput';
 import ReduxFormSelect from './ReduxFormSelect';
 import validator from 'validator';
-import { saveForm, setFormSubmittingFlag } from './UserActions';
+import { saveForm, setFormSubmittingFlag, postalCodeLookup } from './UserActions';
 import { get } from 'lodash';
+import { stateList } from './utils';
+
+const selector = formValueSelector('userForm');
 
 const requiredError = "Please Enter Required Filed";
 
-const stateList =
-    [
-        {
-            label: 'Alabama',
-            value: 'AL',
-        },
-        {
-            label: 'Alaska',
-            value: 'AK',
-        },
-        {
-            label: 'Arizona',
-            value: 'AZ',
-        },
-        {
-            label: 'Arkansas',
-            value: 'AR',
-        },
-        {
-            label: 'California',
-            value: 'CA',
-        },
-        {
-            label: 'Colorado',
-            value: 'CO',
-        },
-        {
-            label: 'Connecticut',
-            value: 'CT',
-        },
-        {
-            label: 'Delaware',
-            value: 'DE',
-        },
-        {
-            label: 'Florida',
-            value: 'FL',
-        },
-        {
-            label: 'Georgia',
-            value: 'GA',
-        },
-        {
-            label: 'Hawaii',
-            value: 'HI',
-        },
-        {
-            label: 'Idaho',
-            value: 'ID',
-        },
-        {
-            label: 'Illinois',
-            value: 'IL',
-        },
-        {
-            label: 'Indiana',
-            value: 'IN',
-        },
-        {
-            label: 'Iowa',
-            value: 'IA',
-        },
-        {
-            label: 'Kansas',
-            value: 'KS',
-        },
-        {
-            label: 'Kentucky',
-            value: 'KY',
-        },
-        {
-            label: 'Louisiana',
-            value: 'LA',
-        },
-        {
-            label: 'Maine',
-            value: 'ME',
-        },
-        {
-            label: 'Maryland',
-            value: 'MD',
-        },
-        {
-            label: 'Massachusetts',
-            value: 'MA',
-        },
-        {
-            label: 'Michigan',
-            value: 'MI',
-        },
-        {
-            label: 'Minnesota',
-            value: 'MN',
-        },
-        {
-            label: 'Mississippi',
-            value: 'MS',
-        },
-        {
-            label: 'Missouri',
-            value: 'MO',
-        },
-        {
-            label: 'Montana',
-            value: 'MT',
-        },
-        {
-            label: 'Nebraska',
-            value: 'NE',
-        },
-        {
-            label: 'Nevada',
-            value: 'NV',
-        },
-        {
-            label: 'New Hampshire',
-            value: 'NH',
-        },
-        {
-            label: 'New Jersey',
-            value: 'NJ',
-        },
-        {
-            label: 'New Mexico',
-            value: 'NM',
-        },
-        {
-            label: 'New York',
-            value: 'NY',
-        },
-        {
-            label: 'North Carolina',
-            value: 'NC',
-        },
-        {
-            label: 'North Dakota',
-            value: 'ND',
-        },
-        {
-            label: 'Ohio',
-            value: 'OH',
-        },
-        {
-            label: 'Oklahoma',
-            value: 'OK',
-        },
-        {
-            label: 'Oregon',
-            value: 'OR',
-        },
-        {
-            label: 'Pennsylvania',
-            value: 'PA',
-        },
-        {
-            label: 'Rhode Island',
-            value: 'RI',
-        },
-        {
-            label: 'South Carolina',
-            value: 'SC',
-        },
-        {
-            label: 'South Dakota',
-            value: 'SD',
-        },
-        {
-            label: 'Tennessee',
-            value: 'TN',
-        },
-        {
-            label: 'Texas',
-            value: 'TX',
-        },
-        {
-            label: 'Utah',
-            value: 'UT',
-        },
-        {
-            label: 'Vermont',
-            value: 'VT',
-        },
-        {
-            label: 'Virginia',
-            value: 'VA',
-        },
-        {
-            label: 'Washington',
-            value: 'WA',
-        },
-        {
-            label: 'West Virginia',
-            value: 'WV',
-        },
-        {
-            label: 'Wisconsin',
-            value: 'WI',
-        },
-        {
-            label: 'Wyoming',
-            value: 'WY',
-        }
-    ];
+
 
 const required = (value) => {
     if (value === undefined || value === '' || value === null) {
@@ -225,6 +26,10 @@ const email = value =>
         ? 'invalid'
         : undefined);
 
+const validUSZipCode = value =>
+    (value && !validator.isPostalCode(value, 'US')
+        ? 'invalid' : undefined);
+
 const onSubmit = (values, dispatch) => {
     dispatch(setFormSubmittingFlag(true));
     //dispatch(saveFormValues(values));
@@ -235,7 +40,7 @@ const onSubmitFail = (errors, dispatch) => {
 };
 
 const UserForm = props => {
-    const { handleSubmit, pristine, reset, submitting, disableSubmit } = props;
+    const { handleSubmit, pristine, reset, submitting, getCityState, zipCode, disableSubmit } = props;
     return (
         <Fragment>
         <form onSubmit={handleSubmit}>
@@ -276,16 +81,43 @@ const UserForm = props => {
                         }}
                     />
                     </div>
-                 <div>
-                      <Field
-                            name="states"
+                    <div>
+                        <Field
+                            name="zip"
+                            component={CustomInput}
+                            validate={[required, validUSZipCode]}
+                            errorMessages={{
+                                required: requiredError,
+                                invalid: 'Enter valid zip code',
+                            }}
+                            label="Zip Code"
+                            controlId="zip"
+                            onBlur={() => { getCityState(zipCode); }}
+                        />
+                    </div>
+                    <div>
+                        <Field
+                            name="city"
+                            component={CustomInput}
+                            validate={[required]}
+                            errorMessages={{
+                                required: required,
+                            }}
+                            label="City"
+                        />
+                    </div>
+                    <div>
+                        <Field
+                            name="state"
                             component={ReduxFormSelect}
                             options={stateList}
                             validate={required}
-                            errorMessage={requiredError}
+                            errorMessages={{
+                                required: requiredError,
+                            }}
                             placeholder="Please select"
-                            label="State"
-                       />
+                            label='State'
+                        />
                     </div>
             </FormSection>
             <div>
@@ -301,11 +133,13 @@ const UserForm = props => {
 
 const mapStateToProps = (state) => ({
     disableSubmit: get(state, 'user.disableSubmit', false),
+    zipCode: selector(state, 'zip'),
 });
 
 const mapDispatchToProps = dispatch => ({
     saveFormValues: val => dispatch(saveForm(val)),
     setFormSubmittingFlag: val => dispatch(setFormSubmittingFlag(val)),
+    getCityState: val => dispatch(postalCodeLookup(val)),
 });
 
 const UserContainer = connect(mapStateToProps, mapDispatchToProps)(reduxForm({
