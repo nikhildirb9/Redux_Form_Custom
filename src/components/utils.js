@@ -1,3 +1,46 @@
+import validator from 'validator';
+
+export const requiredError = "Please Enter Required Filed";
+
+export const required = (value) => {
+    if (value === undefined || value === '' || value === null) {
+        return 'required';
+    }
+    return undefined;
+};
+
+export const email = value =>
+    (value && !validator.isEmail(value)
+        ? 'invalid'
+        : undefined);
+
+export const validUSZipCode = value =>
+    (value && !validator.isPostalCode(value, 'US')
+        ? 'invalid' : undefined);
+
+export const minLength = min => value =>
+    (value && value.length < min ? 'invalid' : undefined);
+
+export const minLength12 = minLength(12);
+
+export const normalizePhone = (value) => {
+    if (!value) {
+        return value;
+    }
+    const onlyNums = value.replace(/[^\d]/g, '');
+    if (onlyNums.length <= 3) {
+        return onlyNums;
+    }
+    if (onlyNums.length <= 7) {
+        return `${onlyNums.slice(0, 3)}-${onlyNums.slice(3)}`;
+    }
+    return `${onlyNums.slice(0, 3)}-${onlyNums.slice(3, 6)}-${onlyNums.slice(
+        6,
+        10,
+    )}`;
+};
+
+
 export const stateList =
     [
         {

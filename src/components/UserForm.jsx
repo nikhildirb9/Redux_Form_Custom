@@ -3,32 +3,12 @@ import { connect } from 'react-redux';
 import { Field, reduxForm, FormSection, formValueSelector } from 'redux-form';
 import CustomInput from './CustomInput';
 import ReduxFormSelect from './ReduxFormSelect';
-import validator from 'validator';
 import { saveForm, setFormSubmittingFlag, postalCodeLookup, clearCityStateValues } from './UserActions';
 import { get } from 'lodash';
-import { stateList } from './utils';
+import { stateList, requiredError, required, email, validUSZipCode, normalizePhone, minLength12 } from './utils';
+import { Button, ButtonToolbar } from 'react-bootstrap';
 
 const selector = formValueSelector('userForm');
-
-const requiredError = "Please Enter Required Filed";
-
-
-
-const required = (value) => {
-    if (value === undefined || value === '' || value === null) {
-        return 'required';
-    }
-    return undefined;
-};
-
-const email = value =>
-    (value && !validator.isEmail(value)
-        ? 'invalid'
-        : undefined);
-
-const validUSZipCode = value =>
-    (value && !validator.isPostalCode(value, 'US')
-        ? 'invalid' : undefined);
 
 const onSubmit = (values, dispatch) => {
     dispatch(setFormSubmittingFlag(true));
@@ -83,6 +63,19 @@ const UserForm = props => {
                     </div>
                     <div>
                         <Field
+                            name="phone"
+                            component={CustomInput}
+                            validate={[required, minLength12]}
+                            errorMessages={{
+                                required: requiredError,
+                                invalid: 'Enter valid Phone number',
+                            }}
+                            label='Phone Number'
+                            normalize={normalizePhone}
+                        />
+                    </div>
+                    <div>
+                        <Field
                             name="zip"
                             component={CustomInput}
                             validate={[required, validUSZipCode]}
@@ -122,11 +115,11 @@ const UserForm = props => {
                     </div>
             </FormSection>
             <div>
-                <button type="submit" disabled={pristine || submitting}>Submit</button>
-                <button type="button" disabled={pristine || submitting} onClick={reset}>
-                    Clear Values
-                </button>
-                </div>
+                <ButtonToolbar>
+                    <Button as="input" type="submit" variant="primary" value="Submit" size="lg" disabled={pristine || submitting}>Submit</Button>
+                    <Button as="input" type="reset" variant="secondary" value="Reset" size="lg" disabled={pristine || submitting} onClick={reset}>Clear Values</Button>
+                </ButtonToolbar>
+            </div>
             </form>
             </Fragment>
     );
