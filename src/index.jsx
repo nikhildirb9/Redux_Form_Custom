@@ -1,20 +1,36 @@
 import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
+import { Switch, Redirect, Route, BrowserRouter as Router, } from 'react-router-dom';
+//import { Router, Route, Link, browserHistory } from 'react-router';
 import { Provider } from "react-redux";
 import configureStore from "./configureStore";
 import UserForm from "./components/UserForm";
+import Details from "./components/Details";
 import 'bootstrap/dist/css/bootstrap.css';
 
 const rootEl = document.getElementById("root");
+
+rootEl.style.position = 'relative';
+
+const divStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginLeft: '-250px',
+};
 
 const store = configureStore();
 
 ReactDOM.render(
     <Provider store={store}>
         <Fragment>
-            <div className="col-md-6">
-            <h2>Registration Form</h2>
-                <UserForm />
+            <div className="col-md-4" style={divStyle}>
+                <h2>Registration Form</h2>
+                <Router>
+                    <Redirect from="/" exact to="/registration" />
+                    <Route path="/registration" component={UserForm} />
+                    <Route path="/details" component={Details} />
+                </Router>
                 </div>
         </Fragment>
     </Provider>,

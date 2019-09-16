@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, FormSection, formValueSelector } from 'redux-form';
+import { Link } from 'react-router-dom';
 import CustomInput from './CustomInput';
 import ReduxFormSelect from './ReduxFormSelect';
 import { saveForm, setFormSubmittingFlag, postalCodeLookup, clearCityStateValues } from './UserActions';
@@ -19,8 +20,9 @@ const onSubmitFail = (errors, dispatch) => {
     dispatch(setFormSubmittingFlag(false));
 };
 
+
 const UserForm = props => {
-    const { handleSubmit, pristine, reset, submitting, getCityState, zipCode, clearCityState, disableSubmit } = props;
+    const { handleSubmit, pristine, reset, submitting, getCityState, zipCode, clearCityState, disableSubmit, setFormSubmittingFlag } = props;
     return (
         <Fragment>
         <form onSubmit={handleSubmit}>
@@ -115,7 +117,13 @@ const UserForm = props => {
                     </div>
             </FormSection>
             <div>
-                <ButtonToolbar>
+                    <ButtonToolbar>
+                        {disableSubmit && (<Link
+                            disabled={pristine || submitting}
+                            to="/details"
+                        >
+                            Next
+                        </Link>)}
                     <Button as="input" type="submit" variant="primary" value="Submit" size="lg" disabled={pristine || submitting}>Submit</Button>
                     <Button as="input" type="reset" variant="secondary" value="Reset" size="lg" disabled={pristine || submitting} onClick={reset}>Clear Values</Button>
                 </ButtonToolbar>
@@ -128,6 +136,7 @@ const UserForm = props => {
 const mapStateToProps = (state) => ({
     disableSubmit: get(state, 'user.disableSubmit', false),
     zipCode: selector(state, 'zip'),
+    submittedForm : get(state, 'form.userForm.submitSucceeded', false),
 });
 
 const mapDispatchToProps = dispatch => ({
