@@ -125,7 +125,7 @@ const UserForm = props => {
                             Next
                         </Link>)}
                     <Button as="input" type="submit" variant="primary" value="Submit" size="lg" disabled={pristine || submitting}>Submit</Button>
-                    <Button as="input" type="reset" variant="secondary" value="Reset" size="lg" disabled={pristine || submitting} onClick={reset}>Clear Values</Button>
+                        <Button as="input" type="reset" variant="secondary" value="Reset" size="lg" disabled={pristine || submitting} onClick={reset}>Clear Values</Button>
                 </ButtonToolbar>
             </div>
             </form>
@@ -144,6 +144,7 @@ const mapDispatchToProps = dispatch => ({
     setFormSubmittingFlag: val => dispatch(setFormSubmittingFlag(val)),
     getCityState: val => dispatch(postalCodeLookup(val)),
     clearCityState: () => dispatch(clearCityStateValues()),
+    resetUserForm: () => dispatch(reset('userForm')),
 });
 
 const UserContainer = connect(mapStateToProps, mapDispatchToProps)(reduxForm({
