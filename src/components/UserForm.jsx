@@ -13,7 +13,7 @@ const selector = formValueSelector('userForm');
 
 const onSubmit = (values, dispatch) => {
     dispatch(setFormSubmittingFlag(true));
-    //dispatch(saveFormValues(values));
+    dispatch(saveForm(values));
 };
 
 const onSubmitFail = (errors, dispatch) => {
@@ -22,7 +22,7 @@ const onSubmitFail = (errors, dispatch) => {
 
 
 const UserForm = props => {
-    const { handleSubmit, pristine, reset, submitting, getCityState, zipCode, clearCityState, disableSubmit, setFormSubmittingFlag } = props;
+    const { handleSubmit, pristine, reset, submitting, getCityState, zipCode, clearCityState, disableSubmit, submittedForm } = props;
     return (
         <Fragment>
         <form onSubmit={handleSubmit}>
@@ -136,7 +136,7 @@ const UserForm = props => {
 const mapStateToProps = (state) => ({
     disableSubmit: get(state, 'user.disableSubmit', false),
     zipCode: selector(state, 'zip'),
-    submittedForm : get(state, 'form.userForm.submitSucceeded', false),
+    submittedForm : get(state, 'form.userForm.values'),
 });
 
 const mapDispatchToProps = dispatch => ({

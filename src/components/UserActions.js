@@ -4,7 +4,17 @@ import { change } from 'redux-form';
 export const FORM_SUBMITTED_FLAG = 'FORM_SUBMITTED_FLAG';
 
 export const saveForm = values => () => {
-    console.log('submitted values', values);
+    const details = {
+        "first_name": values.firstName,
+        "last_name": values.lastName,
+        "email": values.email,
+        "phone": values.phone,
+        "city": values.city,
+        "state": values.state,
+        "zip_code": values.zip
+    };
+    return axios.post(`http://localhost:3000/customers`, details)
+        .then(response => response.data);
 };
 
 export const setFormSubmittingFlag = val => ({
