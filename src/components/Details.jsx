@@ -1,23 +1,49 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
+import { Table } from 'react-bootstrap';
 
 const selector = formValueSelector('userForm');
 
 
-const Details = ({ zipCode, firstName, lastName, email, phone, city, state }) => (
+const Details = ({ zipCode, firstName, lastName, email, phone, city, state, customersList }) => (
         <React.Fragment>
-            <div>
-            <h3>Details</h3>
+             <div>
+                <h3>Recently Submitted Details</h3>
             
-            <p> First Name: {firstName}</p>
-            <p> Last Name: {lastName}</p>
-            <p> Email Id: {email}</p>
-            <p> Telephone: {phone}</p>
-            <p> City: {city}</p>
-            <p> State: {state}</p>
-            <p> Country: USA</p>
-            <p> Zipcode: {zipCode}</p>
+                <p> First Name: {firstName}</p>
+                <p> Last Name: {lastName}</p>
+                <p> Email Id: {email}</p>
+                <p> Telephone: {phone}</p>
+                <p> City: {city}</p>
+                <p> State: {state}</p>
+                <p> Country: USA</p>
+                <p> Zipcode: {zipCode}</p>
+            </div>
+            <div>
+            <h3> All Submitted Details </h3>
+
+                <Table bordered>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email Id</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {customersList && customersList.map((customer, index) => (
+                            <tr>
+                                <th scope="row">{index + 1}</th>
+                                <td>{customer.first_name}</td>
+                                <td>{customer.last_name}</td>
+                                <td>{customer.email}</td>
+                            </tr>
+
+                        ))}
+                    </tbody>
+                 </Table>
             </div>
         </React.Fragment>
 );
@@ -30,6 +56,7 @@ const mapStateToProps = state => ({
     phone: selector(state, 'phone'),
     city: selector(state, 'city'),
     state: selector(state, 'state'),
+    customersList: state.user.registeredDetails,
 });
 
 

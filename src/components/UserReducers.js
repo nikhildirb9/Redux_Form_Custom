@@ -1,7 +1,9 @@
-import { FORM_SUBMITTED_FLAG } from './UserActions';
+import { FORM_SUBMITTED_FLAG, RECEIVE_REGISTRATION_DETAILS, GET_SUBMISSION_DETAILS } from './UserActions';
 
 const initialUserForm = {
     disableSubmit: false,
+    registeredDetails: [],
+    submittedDetails: [],
 };
 
 export const user = (state = initialUserForm, action) => {
@@ -11,6 +13,18 @@ export const user = (state = initialUserForm, action) => {
                 ...state,
                 disableSubmit: action.payload,
             };
+        case RECEIVE_REGISTRATION_DETAILS: {
+            return {
+                ...state,
+                registeredDetails: action.details,
+            };
+        }
+        case GET_SUBMISSION_DETAILS: {
+            return {
+                ...state,
+                submittedDetails: action.submittedDetails,
+            };
+        }
         default: return state;
     }
 };
