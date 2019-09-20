@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { change, getFormSyncErrors, reset, formValueSelector } from 'redux-form';
 
 export const FORM_SUBMITTED_FLAG = 'FORM_SUBMITTED_FLAG';
@@ -70,9 +70,13 @@ export const clearCityStateValues = () => (dispatch) => {
 };
 
 
-export const postalCodeLookup = (postalCode) => (dispatch) => {
-    return axios.get(`http://ziptasticapi.com/${postalCode}`)
-        .then(response => dispatch(fetchCityStateDetails(response.data)));
+export const postalCodeLookup = (postalCode) => (dispatch, getState) => {
+    const errors = getFormSyncErrors('userForm')(getState());
+    const postalCodeError = get(errors, 'zip');
+    if (!postalCodeError) {
+        return axios.get(`http://ziptasticapi.com/${postalCode}`)
+            .then(response => dispatch(fetchCityStateDetails(response.data)));
+    }
 };
 
 export const handleReset = (formName) => (dispatch) => {
