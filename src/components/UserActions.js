@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { isEmpty } from 'lodash';
-import { change, getFormSyncErrors, reset } from 'redux-form';
+import { change, getFormSyncErrors, reset, formValueSelector } from 'redux-form';
 
 export const FORM_SUBMITTED_FLAG = 'FORM_SUBMITTED_FLAG';
 
@@ -23,18 +23,28 @@ export const fetchRegistrationDetails = () => (dispatch) => {
     .then(response => dispatch(receiveRegistrationDetails(response.data)));
 };
 
-export const saveForm = values => (dispatch, getState) => {
-    const errors = getFormSyncErrors('userForm')(getState());
-    const error = isEmpty(errors);
-    if (error) {
+export const saveForm = () => (dispatch, getState) => {
+    const userFormErrors = getFormSyncErrors('userForm')(getState());
+    const productFormErrors = getFormSyncErrors('otherDetailsForm')(getState());
+
+    const userFormSelector = formValueSelector('userForm');
+    const productDetailsSelector = formValueSelector('otherDetailsForm');
+    const userError = isEmpty(userFormErrors);
+    const productFormError = isEmpty(productFormErrors);
+    if (userError && productFormError) {
         const details = {
-            "first_name": values.firstName,
-            "last_name": values.lastName,
-            "email": values.email,
-            "phone": values.phone,
-            "city": values.city,
-            "state": values.state,
-            "zip_code": values.zip
+            "first_name": userFormSelector(getState(), 'firstName'),
+            "last_name": userFormSelector(getState(), 'lastName'),
+            "email": userFormSelector(getState(), 'email'),
+            "phone": userFormSelector(getState(), 'phone'),
+            "city": userFormSelector(getState(), 'city'),
+            "state": userFormSelector(getState(), 'state'),
+            "zip_code": userFormSelector(getState(), 'zip'),
+            "product_type": productDetailsSelector(getState(), 'productType'),
+            "store_name": productDetailsSelector(getState(), 'storeName'),
+            "registered_store": productDetailsSelector(getState(), 'registeredStore'),
+            "purchase_price": productDetailsSelector(getState(), 'purchasePrice'),
+            "product_name": productDetailsSelector(getState(), 'productName'),
         };
         return axios.post(`http://localhost:3000/customers`, details)
             .then(response => {
@@ -66,7 +76,7 @@ export const postalCodeLookup = (postalCode) => (dispatch) => {
         .then(response => dispatch(fetchCityStateDetails(response.data)));
 };
 
-export const handleReset = () => (dispatch) => {
-    dispatch(reset('userForm'));
+export const handleReset = (formName) => (dispatch) => {
+    dispatch(reset(formName));
     dispatch(setFormSubmittingFlag(false));
 };

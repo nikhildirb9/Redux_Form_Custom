@@ -1,10 +1,11 @@
 import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
-import { Switch, Redirect, Route, BrowserRouter as Router, } from 'react-router-dom';
+import { Switch, Redirect, Route, BrowserRouter as Router, } from "react-router-dom";
 //import { Router, Route, Link, browserHistory } from 'react-router';
 import { Provider } from "react-redux";
 import configureStore from "./configureStore";
 import UserForm from "./components/UserForm";
+import OtherDetailsForm from "./components/OtherDetailsForm";
 import Details from "./components/Details";
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -29,6 +30,7 @@ ReactDOM.render(
                 <Router>
                     <Redirect from="/" exact to="/registration" />
                     <Route path="/registration" component={UserForm} />
+                    <Route path="/otherDetails" component={OtherDetailsForm} />
                     <Route path="/details" component={Details} />
                 </Router>
                 </div>

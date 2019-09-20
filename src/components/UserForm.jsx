@@ -4,7 +4,7 @@ import { Field, reduxForm, FormSection, formValueSelector } from 'redux-form';
 import { Link } from 'react-router-dom';
 import CustomInput from './CustomInput';
 import ReduxFormSelect from './ReduxFormSelect';
-import { saveForm, setFormSubmittingFlag, postalCodeLookup, clearCityStateValues, handleReset } from './UserActions';
+import { setFormSubmittingFlag, postalCodeLookup, clearCityStateValues, handleReset } from './UserActions';
 import { get } from 'lodash';
 import { stateList, requiredError, required, email, validUSZipCode, normalizePhone, minLength12 } from './utils';
 import { Button, ButtonToolbar } from 'react-bootstrap';
@@ -12,7 +12,8 @@ import { Button, ButtonToolbar } from 'react-bootstrap';
 const selector = formValueSelector('userForm');
 
 const onSubmit = (values, dispatch) => {
-    dispatch(saveForm(values));
+    //dispatch(saveForm(values));
+    dispatch(setFormSubmittingFlag(true));
 };
 
 const onSubmitFail = (errors, dispatch) => {
@@ -119,12 +120,12 @@ export class UserForm extends Component {
                     <div>
                         <ButtonToolbar>
                             {disableSubmit && (<Link
-                                to="/details"
+                                to="/otherDetails"
                             >
                                 Next
                         </Link>)}
                             <Button as="input" type="submit" variant="primary" value="Submit" size="lg" disabled={pristine || submitting}>Submit</Button>
-                            <Button as="input" type="reset" variant="secondary" value="Reset" size="lg" disabled={pristine || submitting} onClick={handleReset}>Clear Values</Button>
+                            <Button as="input" type="reset" variant="secondary" value="Reset" size="lg" disabled={pristine || submitting} onClick={() => { handleReset('userForm') }}>Clear</Button>
                         </ButtonToolbar>
                     </div>
                 </form>
@@ -139,11 +140,10 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    saveFormValues: val => dispatch(saveForm(val)),
     setFormSubmittingFlag: val => dispatch(setFormSubmittingFlag(val)),
     getCityState: val => dispatch(postalCodeLookup(val)),
     clearCityState: () => dispatch(clearCityStateValues()),
-    handleReset: () => dispatch(handleReset()),
+    handleReset: (name) => dispatch(handleReset(name)),
 });
 
 const UserContainer = connect(mapStateToProps, mapDispatchToProps)(reduxForm({

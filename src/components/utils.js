@@ -244,3 +244,18 @@ export const stateList =
             value: 'WY',
         }
     ];
+
+export const productList = [
+    {
+        label: 'Bed',
+        value: 'Bed',
+    },
+    {
+        label: 'Mattress',
+        value: 'Mattress',
+    },
+    {
+        label: 'Pillow',
+        value: 'Pillow',
+    }
+];
