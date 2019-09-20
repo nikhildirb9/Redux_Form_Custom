@@ -50,7 +50,6 @@ export const saveForm = () => (dispatch, getState) => {
             .then(response => {
                 dispatch(getSubmissionDetails(response.data));
                 dispatch(setFormSubmittingFlag(true));
-                dispatch(fetchRegistrationDetails());
             });
     }
 };

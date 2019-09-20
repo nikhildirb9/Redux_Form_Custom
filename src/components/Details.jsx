@@ -1,60 +1,71 @@
-import React from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
 import { Table } from 'react-bootstrap';
+import { fetchRegistrationDetails } from './UserActions'
 
 const selector = formValueSelector('userForm');
 const productDetailsSelector = formValueSelector('otherDetailsForm');
 
+export class Details extends Component {
+    componentDidMount() {
+        const {
+            getCustomerDetails,
+        } = this.props;
+        getCustomerDetails();
+    }
+    render() {
+        const { zipCode, firstName, lastName, email, phone, city, state, customersList, purchasePrice, storeName, productType } = this.props;
+        return (
+            <Fragment>
+                <div>
+                    <h3>Recently Submitted Details</h3>
 
-const Details = ({ zipCode, firstName, lastName, email, phone, city, state, customersList, purchasePrice, storeName, productType }) => (
-        <React.Fragment>
-             <div>
-                <h3>Recently Submitted Details</h3>
-            
-                <p> First Name: {firstName}</p>
-                <p> Last Name: {lastName}</p>
-                <p> Email Id: {email}</p>
-                <p> Telephone: {phone}</p>
-                <p> City: {city}</p>
-                <p> State: {state}</p>
-                <p> Country: USA</p>
-                <p> Zipcode: {zipCode}</p>
-                <p> Product Type: {productType} </p>
-                <p> Store Name: {storeName} </p>
-                <p> Purchase Price: {purchasePrice} </p>
-            </div>
-            <div>
-               <h3> All Submitted Details </h3>
+                    <p> First Name: {firstName}</p>
+                    <p> Last Name: {lastName}</p>
+                    <p> Email Id: {email}</p>
+                    <p> Telephone: {phone}</p>
+                    <p> City: {city}</p>
+                    <p> State: {state}</p>
+                    <p> Country: USA</p>
+                    <p> Zipcode: {zipCode}</p>
+                    <p> Product Type: {productType} </p>
+                    <p> Store Name: {storeName} </p>
+                    <p> Purchase Price: {purchasePrice} </p>
+                </div>
+                <div>
+                    <h3> All Submitted Details </h3>
 
-                <Table bordered>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email Id</th>
-                            <th>Product Type</th>
-                            <th>Product Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {customersList && customersList.map((customer, index) => (
+                    <Table bordered>
+                        <thead>
                             <tr>
-                                <th scope="row">{index + 1}</th>
-                                <td>{customer.first_name}</td>
-                                <td>{customer.last_name}</td>
-                                <td>{customer.email}</td>
-                                <td>{customer.product_type}</td>
-                                <td>{customer.purchase_price}</td>
+                                <th>#</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email Id</th>
+                                <th>Product Type</th>
+                                <th>Product Name</th>
                             </tr>
+                        </thead>
+                        <tbody>
+                            {customersList && customersList.map((customer, index) => (
+                                <tr>
+                                    <th scope="row">{index + 1}</th>
+                                    <td>{customer.first_name}</td>
+                                    <td>{customer.last_name}</td>
+                                    <td>{customer.email}</td>
+                                    <td>{customer.product_type}</td>
+                                    <td>{customer.purchase_price}</td>
+                                </tr>
 
-                        ))}
-                    </tbody>
-                 </Table>
-            </div>
-        </React.Fragment>
-);
+                            ))}
+                        </tbody>
+                    </Table>
+                </div>
+            </Fragment>
+        );
+    }
+}
 
 const mapStateToProps = state => ({
     zipCode: selector(state, 'zip'),
@@ -70,5 +81,9 @@ const mapStateToProps = state => ({
     customersList: state.user.registeredDetails,
 });
 
+const mapDispatchToProps = dispatch => ({
+    getCustomerDetails: () => dispatch(fetchRegistrationDetails()),
+});
 
-export default connect(mapStateToProps)(Details);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Details);
