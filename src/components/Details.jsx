@@ -2,7 +2,8 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
 import { Table } from 'react-bootstrap';
-import { fetchRegistrationDetails } from './UserActions'
+import { fetchRegistrationDetails, deleteDetail } from './UserActions';
+import { Button } from 'react-bootstrap';
 
 const selector = formValueSelector('userForm');
 const productDetailsSelector = formValueSelector('otherDetailsForm');
@@ -15,7 +16,7 @@ export class Details extends Component {
         getCustomerDetails();
     }
     render() {
-        const { zipCode, firstName, lastName, email, phone, city, state, customersList, purchasePrice, storeName, productType } = this.props;
+        const { zipCode, firstName, lastName, email, phone, city, state, customersList, purchasePrice, storeName, productType, deleteDetail } = this.props;
         return (
             <Fragment>
                 <div>
@@ -45,6 +46,7 @@ export class Details extends Component {
                                 <th>Email Id</th>
                                 <th>Product Type</th>
                                 <th>Product Name</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -56,6 +58,7 @@ export class Details extends Component {
                                     <td>{customer.email}</td>
                                     <td>{customer.product_type}</td>
                                     <td>{customer.purchase_price}</td>
+                                    <td><Button variant="danger" value="Delete" size="lg" onClick={() => { deleteDetail(customer.id); }}>Delete</Button></td>
                                 </tr>
 
                             ))}
@@ -83,6 +86,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     getCustomerDetails: () => dispatch(fetchRegistrationDetails()),
+    deleteDetail: (value) => dispatch(deleteDetail(value)),
 });
 
 

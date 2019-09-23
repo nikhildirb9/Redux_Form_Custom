@@ -1,6 +1,5 @@
 import React from 'react';
 import { HelpBlock } from 'react-bootstrap';
-import classNames from 'classnames';
 import RadioButton from './RadioButton';
 
 const getRadioButton = ({
@@ -21,7 +20,6 @@ const RadioGroup = ({
     vertical = true,
     label,
     groupName,
-    className,
     radioButtons,
     errorMessage,
     input: {
@@ -33,15 +31,11 @@ const RadioGroup = ({
         touched,
     },
 }) => (
-        <div className={classNames(
-            className,
-            { 'inline-radio-buttons': !vertical },
-        )}
-        >
+        <div>
             <div>{label}</div>
             {radioButtons && radioButtons.map(radioButton => (
                 vertical ?
-                    <div key={radioButton.id} className="olb-margin-medium">
+                    <div key={radioButton.id}>
                         {getRadioButton({
                             radioButton, groupName, value, onChange,
                         })}

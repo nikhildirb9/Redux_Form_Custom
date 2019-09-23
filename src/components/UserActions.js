@@ -83,3 +83,11 @@ export const handleReset = (formName) => (dispatch) => {
     dispatch(reset(formName));
     dispatch(setFormSubmittingFlag(false));
 };
+
+export const deleteDetail = (value) => (dispatch) => {
+    return axios.delete(`http://localhost:3000/customers/${value}`)
+        .then(response => {
+            response.data;
+            dispatch(fetchRegistrationDetails());
+        });
+};
