@@ -7,7 +7,7 @@ import ReduxFormSelect from './ReduxFormSelect';
 import RadioGroup from './RadioGroup';
 import { saveForm, setFormSubmittingFlag, handleReset } from './UserActions';
 import { get } from 'lodash';
-import { productList, requiredError, required } from './utils';
+import { productList, requiredError, required, formatCurrency, normalizeAmount } from './utils';
 import { Button, ButtonToolbar, ControlLabel } from 'react-bootstrap';
 
 const onSubmit = (values, dispatch) => {
@@ -72,6 +72,8 @@ export class OtherDetailsForm extends Component {
                                 errorMessages={{
                                     required: requiredError,
                                 }}
+                                format={formatCurrency}
+                                normalize={normalizeAmount}
                             />
                         </div>
                         <div>

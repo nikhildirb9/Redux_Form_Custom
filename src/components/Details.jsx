@@ -4,9 +4,14 @@ import { formValueSelector } from 'redux-form';
 import { Table } from 'react-bootstrap';
 import { fetchRegistrationDetails, deleteDetail } from './UserActions';
 import { Button } from 'react-bootstrap';
+import { formatCurrency } from './utils';
 
 const selector = formValueSelector('userForm');
 const productDetailsSelector = formValueSelector('otherDetailsForm');
+
+const displayPrice = (price) => {
+    return price !== '' ? formatCurrency(price) : '';
+};
 
 export class Details extends Component {
     componentDidMount() {
@@ -32,7 +37,7 @@ export class Details extends Component {
                     <p> Zipcode: {zipCode}</p>
                     <p> Product Type: {productType} </p>
                     <p> Store Name: {storeName} </p>
-                    <p> Purchase Price: {purchasePrice} </p>
+                    <p> Purchase Price: {displayPrice(purchasePrice)} </p>
                 </div>
                 <div>
                     <h3> All Submitted Details </h3>
@@ -57,8 +62,10 @@ export class Details extends Component {
                                     <td>{customer.last_name}</td>
                                     <td>{customer.email}</td>
                                     <td>{customer.product_type}</td>
-                                    <td>{customer.purchase_price}</td>
-                                    <td><Button variant="danger" value="Delete" size="lg" onClick={() => { deleteDetail(customer.id); }}>Delete</Button></td>
+                                    <td>{displayPrice(customer.purchase_price)}</td>
+                                    <td>
+                                        <Button variant="danger" value="Delete" size="lg" onClick={() => { deleteDetail(customer.id); }}>Delete</Button>
+                                    </td>
                                 </tr>
 
                             ))}

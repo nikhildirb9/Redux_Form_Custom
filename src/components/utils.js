@@ -1,4 +1,5 @@
 import validator from 'validator';
+import accounting from 'accounting';
 
 export const requiredError = "Please Enter Required Filed";
 
@@ -39,6 +40,15 @@ export const normalizePhone = (value) => {
         10,
     )}`;
 };
+
+export const formatCurrency = (value, precision) => accounting.formatMoney(value, {
+    symbol: '$',
+    precision: precision || 0,
+});
+
+export const normalizeAmount = (value) => {
+    return value.replace(/,/g, '');
+}
 
 
 export const stateList =
