@@ -50,6 +50,7 @@ export const normalizeAmount = (value) => {
     return value.replace(/,/g, '');
 }
 
+export const isCheckboxValid = value => (value ? undefined : 'invalid');
 
 export const stateList =
     [

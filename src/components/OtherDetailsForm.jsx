@@ -4,10 +4,11 @@ import { Field, reduxForm, FormSection, formValueSelector } from 'redux-form';
 import { Link } from 'react-router-dom';
 import CustomInput from './CustomInput';
 import ReduxFormSelect from './ReduxFormSelect';
+import ReduxFormCheckbox from './ReduxFormCheckbox';
 import RadioGroup from './RadioGroup';
 import { saveForm, setFormSubmittingFlag, handleReset, onProductTypeChange } from './UserActions';
 import { get } from 'lodash';
-import { productList, requiredError, required, formatCurrency, normalizeAmount, productSizes } from './utils';
+import { productList, requiredError, required, formatCurrency, normalizeAmount, isCheckboxValid } from './utils';
 import { Button, ButtonToolbar, ControlLabel } from 'react-bootstrap';
 
 const selector = formValueSelector('otherDetailsForm');
@@ -33,7 +34,7 @@ const getProductSizes = (productSizes) => {
 
 export class OtherDetailsForm extends Component {
     render() {
-        const { handleSubmit, pristine, submitting, disableSubmit, handleReset, productType, productSize, onProductTypeChange, productSizes } = this.props;
+        const { handleSubmit, pristine, submitting, disableSubmit, handleReset, productType, productSize, onProductTypeChange, productSizes, isReceiveEmails, isTC } = this.props;
         return (
             <Fragment>
                 <form onSubmit={handleSubmit}>
@@ -124,6 +125,24 @@ export class OtherDetailsForm extends Component {
                                 disabled={!(productType && productSize)}
                             />
                         </div>
+                        <div>
+                            <Field
+                                name="isReceiveEmails"
+                                label="Opt in for future communications (I want to receive future communications, such as coupons, mailings, or other special offers. Failure to submit this registration will not diminish your warranty rights.)"
+                                component={ReduxFormCheckbox}
+                                checked={isReceiveEmails}
+                            />
+                        </div>
+                        <div>
+                            <Field
+                                name="isTC"
+                                label="By clicking the box you are stating the warranty claim forms are accurate and complete to the best of your knowledge. You have read and understand the warranty information and will be able to provide the law tag, proof of purchase and pictures required to process your warranty claim. I understand that in accordance with this provided warranty that the final judgment as to coverage will be made by Tempur-Pedic."
+                                component={ReduxFormCheckbox}
+                                checked={isTC}
+                                validate={isCheckboxValid}
+                                errorMessage={requiredError}
+                            />
+                        </div>
                     </FormSection>
                     <div>
                         <ButtonToolbar>
@@ -147,6 +166,8 @@ const mapStateToProps = (state) => ({
     productType: selector(state, 'productType'),
     productSize: selector(state, 'productSize'),
     productSizes: get(state, 'user.sizes'),
+    isReceiveEmails: selector(state, 'isReceiveEmails'),
+    isTC: selector(state, 'isTC'),
 });
 
 const mapDispatchToProps = dispatch => ({
