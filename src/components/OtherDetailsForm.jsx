@@ -23,7 +23,7 @@ const onSubmitFail = (errors, dispatch) => {
 
 export class OtherDetailsForm extends Component {
     render() {
-        const { handleSubmit, pristine, submitting, disableSubmit, handleReset, productType, productSize } = this.props;
+        const { handleSubmit, pristine, submitting, disableSubmit, handleReset, productType, productSize, onProductTypeChange } = this.props;
         return (
             <Fragment>
                 <form onSubmit={handleSubmit}>
@@ -87,6 +87,7 @@ export class OtherDetailsForm extends Component {
                                 errorMessage={requiredError}
                                 placeholder="Please select"
                                 label='Product Type'
+                                onChange={() => { onProductTypeChange(); }}
                             />
                         </div>
                         <div>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { isEmpty, get } from 'lodash';
-import { change, getFormSyncErrors, reset, formValueSelector } from 'redux-form';
+import { change, getFormSyncErrors, reset, formValueSelector, clearFields } from 'redux-form';
 
 export const FORM_SUBMITTED_FLAG = 'FORM_SUBMITTED_FLAG';
 
@@ -90,4 +90,10 @@ export const deleteDetail = (value) => (dispatch) => {
             response.data;
             dispatch(fetchRegistrationDetails());
         });
+};
+
+export const onProductTypeChange = () => (dispatch) => {
+    const fieldNames = ['productSize', 'productName'];
+    const fields = fieldNames.map(fieldName => `${fieldName}`);
+    dispatch(clearFields('otherDetailsForm', false, false, ...fields));
 };
