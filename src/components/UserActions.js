@@ -8,6 +8,8 @@ export const RECEIVE_REGISTRATION_DETAILS = 'RECEIVE_REGISTRATION_DETAILS';
 
 export const GET_SUBMISSION_DETAILS = 'GET_SUBMISSION_DETAILS';
 
+export const FETCH_PRODUCT_SIZES = 'FETCH_PRODUCT_SIZES';
+
 export const getSubmissionDetails = (submittedDetails) => ({
     type: GET_SUBMISSION_DETAILS,
     submittedDetails,
@@ -92,8 +94,19 @@ export const deleteDetail = (value) => (dispatch) => {
         });
 };
 
-export const onProductTypeChange = () => (dispatch) => {
+const fetchProductSizes = (sizes) => ({
+    type: FETCH_PRODUCT_SIZES,
+    sizes,
+});
+
+export const onProductTypeChange = (ev, productType) => (dispatch) => {
     const fieldNames = ['productSize', 'productName'];
     const fields = fieldNames.map(fieldName => `${fieldName}`);
     dispatch(clearFields('otherDetailsForm', false, false, ...fields));
+    dispatch(getProductSizes(ev, productType));
 };
+
+export const getProductSizes = (ev, productType) => (dispatch, getState) => {
+    return axios.get(`http://localhost:3000/${productType}`)
+        .then(response => dispatch(fetchProductSizes(response.data)));
+}
