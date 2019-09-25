@@ -109,9 +109,7 @@ export class UserForm extends Component {
                                 component={ReduxFormSelect}
                                 options={stateList}
                                 validate={required}
-                                errorMessages={{
-                                    required: requiredError,
-                                }}
+                                errorMessage={requiredError}
                                 placeholder="Please select"
                                 label='State'
                             />

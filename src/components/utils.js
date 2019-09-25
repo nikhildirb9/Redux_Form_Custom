@@ -257,15 +257,58 @@ export const stateList =
 
 export const productList = [
     {
-        label: 'Bed',
-        value: 'Bed',
-    },
-    {
         label: 'Mattress',
         value: 'Mattress',
     },
     {
-        label: 'Pillow',
-        value: 'Pillow',
+        label: 'Foundation',
+        value: 'Foundation',
+    },
+    {
+        label: 'Item',
+        value: 'Item',
     }
+];
+
+export const productSizes = [
+        {
+            label: 'Twin',
+            value: 'Twin',
+        },
+        {
+            label: 'Double/Full',
+            value: 'Double/Full',
+        },
+        {
+            label: 'Queen',
+            value: 'Queen',
+        },
+        {
+            label: 'King',
+            value: 'King',
+        },
+        {
+            label: 'Twin Long/ Twin XL',
+            value: 'Twin Long / Twin XL',
+        },
+        {
+            label: 'Double Long/ Full XL',
+            value: 'Double Long/ Full XL',
+        },
+        {
+            label: 'Split Queen',
+            value: 'Split Queen',
+        },
+        {
+            label: 'CA King',
+            value: 'CA King',
+        },
+        {
+            label: 'Split CA King/ CA Twin',
+            value: 'Split CA King/ CA Twin',
+        },
+        {
+            label: 'Other',
+            value: 'Other',
+        }
 ];

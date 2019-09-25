@@ -1,14 +1,16 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm, FormSection } from 'redux-form';
+import { Field, reduxForm, FormSection, formValueSelector } from 'redux-form';
 import { Link } from 'react-router-dom';
 import CustomInput from './CustomInput';
 import ReduxFormSelect from './ReduxFormSelect';
 import RadioGroup from './RadioGroup';
-import { saveForm, setFormSubmittingFlag, handleReset } from './UserActions';
+import { saveForm, setFormSubmittingFlag, handleReset, onProductTypeChange } from './UserActions';
 import { get } from 'lodash';
-import { productList, requiredError, required, formatCurrency, normalizeAmount } from './utils';
+import { productList, requiredError, required, formatCurrency, normalizeAmount, productSizes } from './utils';
 import { Button, ButtonToolbar, ControlLabel } from 'react-bootstrap';
+
+const selector = formValueSelector('otherDetailsForm');
 
 const onSubmit = (values, dispatch) => {
     dispatch(saveForm());
@@ -21,7 +23,7 @@ const onSubmitFail = (errors, dispatch) => {
 
 export class OtherDetailsForm extends Component {
     render() {
-        const { handleSubmit, pristine, submitting, disableSubmit, handleReset } = this.props;
+        const { handleSubmit, pristine, submitting, disableSubmit, handleReset, productType, productSize } = this.props;
         return (
             <Fragment>
                 <form onSubmit={handleSubmit}>
@@ -78,6 +80,29 @@ export class OtherDetailsForm extends Component {
                         </div>
                         <div>
                             <Field
+                                name="productType"
+                                component={ReduxFormSelect}
+                                options={productList}
+                                validate={required}
+                                errorMessage={requiredError}
+                                placeholder="Please select"
+                                label='Product Type'
+                            />
+                        </div>
+                        <div>
+                            <Field
+                                name="productSize"
+                                component={ReduxFormSelect}
+                                options={productSizes}
+                                validate={required}
+                                errorMessage={requiredError}
+                                placeholder="Please select"
+                                label='Product Size'
+                                disabled={!productType}
+                            />
+                        </div>
+                        <div>
+                            <Field
                                 name="productName"
                                 component={CustomInput}
                                 validate={[required]}
@@ -85,19 +110,7 @@ export class OtherDetailsForm extends Component {
                                     required: requiredError,
                                 }}
                                 label='Product Name'
-                            />
-                        </div>
-                        <div>
-                            <Field
-                                name="productType"
-                                component={ReduxFormSelect}
-                                options={productList}
-                                validate={required}
-                                errorMessages={{
-                                    required: requiredError,
-                                }}
-                                placeholder="Please select"
-                                label='Product Type'
+                                disabled={!(productType && productSize)}
                             />
                         </div>
                     </FormSection>
@@ -120,12 +133,16 @@ export class OtherDetailsForm extends Component {
 
 const mapStateToProps = (state) => ({
     disableSubmit: get(state, 'user.disableSubmit', false),
+    productType: selector(state, 'productType'),
+    productSize: selector(state, 'productSize',)
+
 });
 
 const mapDispatchToProps = dispatch => ({
     saveFormValues: () => dispatch(saveForm()),
     setFormSubmittingFlag: val => dispatch(setFormSubmittingFlag(val)),
     handleReset: (name) => dispatch(handleReset(name)),
+    onProductTypeChange: () => dispatch(onProductTypeChange()),
 });
 
 const OtherDetailsContainer = connect(mapStateToProps, mapDispatchToProps)(reduxForm({

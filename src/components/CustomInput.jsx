@@ -22,6 +22,7 @@ const CustomInput = ({
     controlId,
     label,
     errorMessages,
+    disabled,
     input: {
         onBlur,
         onChange,
@@ -52,6 +53,7 @@ const CustomInput = ({
                 onFocus={onFocus}
                 onKeyDown={onKeyDown}
                 value={value}
+                disabled={disabled}
             />
             <FormControl.Feedback />
             {touched && error &&
