@@ -1,10 +1,11 @@
-import { FORM_SUBMITTED_FLAG, RECEIVE_REGISTRATION_DETAILS, GET_SUBMISSION_DETAILS, FETCH_PRODUCT_SIZES } from './UserActions';
+import { FORM_SUBMITTED_FLAG, RECEIVE_REGISTRATION_DETAILS, GET_SUBMISSION_DETAILS, FETCH_PRODUCT_SIZES, GET_FILE_UPDATE } from './UserActions';
 
 const initialUserForm = {
     disableSubmit: false,
     registeredDetails: [],
     submittedDetails: [],
     sizes: [],
+    file: [],
 };
 
 export const user = (state = initialUserForm, action) => {
@@ -30,6 +31,12 @@ export const user = (state = initialUserForm, action) => {
             return {
                 ...state,
                 sizes: action.sizes,
+            };
+        }
+        case GET_FILE_UPDATE: {
+            return {
+                ...state,
+                file: action.file,
             };
         }
         default: return state;

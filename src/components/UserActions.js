@@ -10,6 +10,8 @@ export const GET_SUBMISSION_DETAILS = 'GET_SUBMISSION_DETAILS';
 
 export const FETCH_PRODUCT_SIZES = 'FETCH_PRODUCT_SIZES';
 
+export const GET_FILE_UPDATE = 'GET_FILE_UPDATE';
+
 export const getSubmissionDetails = (submittedDetails) => ({
     type: GET_SUBMISSION_DETAILS,
     submittedDetails,
@@ -47,6 +49,7 @@ export const saveForm = () => (dispatch, getState) => {
             "registered_store": productDetailsSelector(getState(), 'registeredStore'),
             "purchase_price": productDetailsSelector(getState(), 'purchasePrice'),
             "product_name": productDetailsSelector(getState(), 'productName'),
+            "attachments": get(getState(), 'user.file'),
         };
         return axios.post(`http://localhost:3000/customers`, details)
             .then(response => {
@@ -109,4 +112,14 @@ export const onProductTypeChange = (ev, productType) => (dispatch) => {
 export const getProductSizes = (ev, productType) => (dispatch, getState) => {
     return axios.get(`http://localhost:3000/${productType}`)
         .then(response => dispatch(fetchProductSizes(response.data)));
-}
+};
+
+export const fileUpdate = (file) => ({
+    type: GET_FILE_UPDATE,
+    file,
+});
+
+export const getFileUpdate = (files) => (dispatch) => {
+    const fileItems = files.map(fileItem => fileItem.file);
+    return dispatch(fileUpdate(fileItems));
+};

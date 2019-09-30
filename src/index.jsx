@@ -7,6 +7,7 @@ import configureStore from "./configureStore";
 import UserForm from "./components/UserForm";
 import OtherDetailsForm from "./components/OtherDetailsForm";
 import Details from "./components/Details";
+import FilePondEx from './components/FilePondEx';
 import 'bootstrap/dist/css/bootstrap.css';
 
 const rootEl = document.getElementById("root");
@@ -32,6 +33,7 @@ ReactDOM.render(
                     <Route path="/registration" component={UserForm} />
                     <Route path="/otherDetails" component={OtherDetailsForm} />
                     <Route path="/details" component={Details} />
+                    <Route path="/filePond" component={FilePondEx} />
                 </Router>
                 </div>
         </Fragment>

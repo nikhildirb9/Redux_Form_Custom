@@ -10,6 +10,7 @@ import { saveForm, setFormSubmittingFlag, handleReset, onProductTypeChange } fro
 import { get } from 'lodash';
 import { productList, requiredError, required, formatCurrency, normalizeAmount, isCheckboxValid } from './utils';
 import { Button, ButtonToolbar, ControlLabel } from 'react-bootstrap';
+import FilePondEx from './FilePondEx';
 
 const selector = formValueSelector('otherDetailsForm');
 
@@ -124,6 +125,10 @@ export class OtherDetailsForm extends Component {
                                 label='Product Name'
                                 disabled={!(productType && productSize)}
                             />
+                        </div>
+                        <div>
+                            <h4>File Attachments (The maximum file size is 8 MB)</h4>
+                            <FilePondEx />
                         </div>
                         <div>
                             <Field
