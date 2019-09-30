@@ -1,5 +1,6 @@
 import React from 'react';
 import Checkbox from './Checkbox';
+import { HelpBlock } from 'react-bootstrap';
 
 const ReduxFormCheckbox = ({
     label,
@@ -31,7 +32,7 @@ const ReduxFormCheckbox = ({
                 onChange={onChange}
             />
             {!disabled && touched && error &&
-                <div>{errorMessage}</div>
+                <HelpBlock>{errorMessage}</HelpBlock>
             }
         </div>
     );

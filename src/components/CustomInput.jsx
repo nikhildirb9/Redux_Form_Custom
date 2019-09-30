@@ -42,7 +42,7 @@ const CustomInput = ({
             bsClass="custom-form-field"
             validationState={getValidationState(value, active, touched, error)}
         >
-            <div className="olb-margin-extra-small ">
+            <div>
                 <ControlLabel>{label}</ControlLabel>
             </div>
             <FormControl
