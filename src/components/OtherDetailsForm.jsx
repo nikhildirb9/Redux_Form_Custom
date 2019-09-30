@@ -8,9 +8,11 @@ import ReduxFormCheckbox from './ReduxFormCheckbox';
 import RadioGroup from './RadioGroup';
 import { saveForm, setFormSubmittingFlag, handleReset, onProductTypeChange } from './UserActions';
 import { get } from 'lodash';
-import { productList, requiredError, required, formatCurrency, normalizeAmount, isCheckboxValid } from './utils';
+import { productList, requiredError, required, formatCurrency, normalizeAmount, isCheckboxValid, normalizeDate, number, formatDate, dateRequired } from './utils';
 import { Button, ButtonToolbar, ControlLabel } from 'react-bootstrap';
 import FilePondEx from './FilePondEx';
+import ComboDatePicker from './ComboDatePicker';
+import '../css/userForm.css';
 
 const selector = formValueSelector('otherDetailsForm');
 
@@ -92,6 +94,19 @@ export class OtherDetailsForm extends Component {
                         </div>
                         <div>
                             <Field
+                                label="Delivery Date"
+                                name="deliveryDate"
+                                component={CustomInput}
+                                validate={[required]}
+                                errorMessages={{
+                                    required: requiredError,
+                                    invalid: 'invalid date'
+                                }}
+                                normalize={normalizeDate}
+                            />
+                        </div>
+                        <div>
+                            <Field
                                 name="productType"
                                 component={ReduxFormSelect}
                                 options={productList}
@@ -124,6 +139,45 @@ export class OtherDetailsForm extends Component {
                                 }}
                                 label='Product Name'
                                 disabled={!(productType && productSize)}
+                            />
+                        </div>
+                        <div>
+                            <Field
+                                name="quantity"
+                                component={CustomInput}
+                                label="Quantity"
+                                validate={[required, number]}
+                                errorMessages={{
+                                    required: requiredError,
+                                    invalid: "Enter a number"
+                                }}
+                            />
+                        </div>
+                        <div>
+                            <Field
+                                label="Date of Purchase"
+                                name="purchaseDate"
+                                labelClassName="select-label"
+                                order="mdy"
+                                minDate="2000-01-01"
+                                attrsDate={{
+                                    placeholder: 'Day',
+                                    className: 'day-box',
+                                }}
+                                attrsMonth={{
+                                    placeholder: 'Month',
+                                    className: 'month-box',
+                                }}
+                                attrsYear={{
+                                    placeholder: 'Year',
+                                    className: 'year-box',
+                                }}
+                                component={ComboDatePicker}
+                                normalize={val => formatDate(val)}
+                                errorMessages={{
+                                    required: requiredError,
+                                }}
+                                validate={[dateRequired]}
                             />
                         </div>
                         <div>

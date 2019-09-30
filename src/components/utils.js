@@ -1,5 +1,6 @@
 import validator from 'validator';
 import accounting from 'accounting';
+import moment from 'moment';
 
 export const requiredError = "Please Enter Required Filed";
 
@@ -46,9 +47,39 @@ export const formatCurrency = (value, precision) => accounting.formatMoney(value
     precision: precision || 0,
 });
 
+export const number = value => (value && isNaN(Number(value)) ? 'invalid' : undefined);
+
 export const normalizeAmount = (value) => {
     return value.replace(/,/g, '');
-}
+};
+
+export const dateRequired = date => (moment(date).isValid() && date ? undefined : 'required');
+
+export const formatDate = (date, format) =>
+    (moment(date).isValid() ?
+        moment.utc(date).format(format || 'MM/DD/YYYY') : '');
+
+export const normalizeDate = (value, prevValue) => {
+    if (!value) return value;
+
+    const valueOnlyNumbers = value.replace(/[^\d]/g, '');
+    const prevValueOnlyNumbers = prevValue && prevValue.replace(/[^\d]/g, '');
+
+    // Enable backspacing:
+    // if the user is backspacing and they backspace a forward slash, the date's
+    // numbers won't be affected so just return the value.
+    if (valueOnlyNumbers === prevValueOnlyNumbers) return value;
+
+    const month = valueOnlyNumbers.slice(0, 2);
+    const day = valueOnlyNumbers.slice(2, 4);
+    const year = valueOnlyNumbers.slice(4, 8);
+
+    if (valueOnlyNumbers.length < 2) return `${month}`;
+    if (valueOnlyNumbers.length == 2) return `${month}/`;
+    if (valueOnlyNumbers.length < 4) return `${month}/${day}`;
+    if (valueOnlyNumbers.length == 4) return `${month}/${day}/`;
+    if (valueOnlyNumbers.length > 4) return `${month}/${day}/${year}`;
+};
 
 export const isCheckboxValid = value => (value ? undefined : 'invalid');
 

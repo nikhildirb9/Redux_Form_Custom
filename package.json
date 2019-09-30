@@ -45,6 +45,7 @@
     "filepond-plugin-image-exif-orientation": "^1.0.6",
     "filepond-plugin-image-preview": "^4.4.0",
     "lodash": "^4.17.15",
+    "moment": "^2.24.0",
     "react": "^16.3.2",
     "react-async-script": "^0.9.1",
     "react-bootstrap": "^0.32.4",
