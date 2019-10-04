@@ -5,6 +5,8 @@ import { Table } from 'react-bootstrap';
 import { fetchRegistrationDetails, deleteDetail } from './UserActions';
 import { Button } from 'react-bootstrap';
 import { formatCurrency } from './utils';
+import Loader from 'react-loader-spinner';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const selector = formValueSelector('userForm');
 const productDetailsSelector = formValueSelector('otherDetailsForm');
@@ -21,7 +23,7 @@ export class Details extends Component {
         getCustomerDetails();
     }
     render() {
-        const { zipCode, firstName, lastName, email, phone, city, state, customersList, purchasePrice, storeName, productType, deleteDetail } = this.props;
+        const { zipCode, firstName, lastName, email, phone, city, state, customersList, purchasePrice, storeName, productType, deleteDetail, loadingDetails } = this.props;
         return (
             <Fragment>
                 <div>
@@ -39,39 +41,52 @@ export class Details extends Component {
                     <p> Store Name: {storeName} </p>
                     <p> Purchase Price: {displayPrice(purchasePrice)} </p>
                 </div>
-                <div>
-                    <h3> All Submitted Details </h3>
+                {loadingDetails &&
+                    (<div>
+                        <Loader
+                            type="ThreeDots"
+                            color="#00BFFF"
+                            height={100}
+                            width={100}
+                            //timeout={3000} //3 secs
+                        />
+                    </div>)
+                }
+                {!loadingDetails && (
+                    <div>
+                        <h3> All Submitted Details </h3>
 
-                    <Table bordered>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Email Id</th>
-                                <th>Product Type</th>
-                                <th>Product Name</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {customersList && customersList.map((customer, index) => (
+                        <Table bordered>
+                            <thead>
                                 <tr>
-                                    <th scope="row">{index + 1}</th>
-                                    <td>{customer.first_name}</td>
-                                    <td>{customer.last_name}</td>
-                                    <td>{customer.email}</td>
-                                    <td>{customer.product_type}</td>
-                                    <td>{displayPrice(customer.purchase_price)}</td>
-                                    <td>
-                                        <Button variant="danger" value="Delete" size="lg" onClick={() => { deleteDetail(customer.id); }}>Delete</Button>
-                                    </td>
+                                    <th>#</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email Id</th>
+                                    <th>Product Type</th>
+                                    <th>Product Name</th>
+                                    <th></th>
                                 </tr>
+                            </thead>
+                            <tbody>
+                                {customersList && customersList.map((customer, index) => (
+                                    <tr>
+                                        <th scope="row">{index + 1}</th>
+                                        <td>{customer.first_name}</td>
+                                        <td>{customer.last_name}</td>
+                                        <td>{customer.email}</td>
+                                        <td>{customer.product_type}</td>
+                                        <td>{displayPrice(customer.purchase_price)}</td>
+                                        <td>
+                                            <Button variant="danger" value="Delete" size="lg" onClick={() => { deleteDetail(customer.id); }}>Delete</Button>
+                                        </td>
+                                    </tr>
 
-                            ))}
-                        </tbody>
-                    </Table>
-                </div>
+                                ))}
+                            </tbody>
+                        </Table>
+                    </div>
+                )}
             </Fragment>
         );
     }
@@ -89,6 +104,7 @@ const mapStateToProps = state => ({
     storeName: productDetailsSelector(state, 'storeName'),
     purchasePrice: productDetailsSelector(state, 'purchasePrice'),
     customersList: state.user.registeredDetails,
+    loadingDetails: state.user.isFetching.details,
 });
 
 const mapDispatchToProps = dispatch => ({

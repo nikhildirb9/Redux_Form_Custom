@@ -12,6 +12,13 @@ export const FETCH_PRODUCT_SIZES = 'FETCH_PRODUCT_SIZES';
 
 export const GET_FILE_UPDATE = 'GET_FILE_UPDATE';
 
+export const SUBMIT_DETAILS = 'SUBMIT_DETAILS';
+
+export const postDetails = payload => ({
+    type: SUBMIT_DETAILS,
+    payload,
+});
+
 export const getSubmissionDetails = (submittedDetails) => ({
     type: GET_SUBMISSION_DETAILS,
     submittedDetails,
@@ -23,6 +30,7 @@ const receiveRegistrationDetails = (details) => ({
 });
 
 export const fetchRegistrationDetails = () => (dispatch) => {
+    dispatch(postDetails());
     return axios.get(`http://localhost:3000/customers`)
     .then(response => dispatch(receiveRegistrationDetails(response.data)));
 };
