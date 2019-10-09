@@ -24,10 +24,6 @@ const onSubmitFail = (errors, dispatch) => {
     dispatch(setFormSubmittingFlag(false));
 };
 
-const closeModal = (dispatch) => {
-    dispatch(toggleModal(false));
-};
-
 const getProductSizes = (productSizes) => {
     if (productSizes && productSizes.length !== 0) {
         return productSizes.map(option => ({
