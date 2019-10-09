@@ -4,6 +4,8 @@ import { change, getFormSyncErrors, reset, formValueSelector, clearFields } from
 
 export const FORM_SUBMITTED_FLAG = 'FORM_SUBMITTED_FLAG';
 
+export const TOGGLE_MODAL = 'TOGGLE_MODAL';
+
 export const RECEIVE_REGISTRATION_DETAILS = 'RECEIVE_REGISTRATION_DETAILS';
 
 export const GET_SUBMISSION_DETAILS = 'GET_SUBMISSION_DETAILS';
@@ -69,6 +71,11 @@ export const saveForm = () => (dispatch, getState) => {
 
 export const setFormSubmittingFlag = val => ({
     type: FORM_SUBMITTED_FLAG,
+    payload: val,
+});
+
+export const toggleModal = val => ({
+    type: TOGGLE_MODAL,
     payload: val,
 });
 

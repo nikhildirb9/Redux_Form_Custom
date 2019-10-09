@@ -6,10 +6,10 @@ import CustomInput from './CustomInput';
 import ReduxFormSelect from './ReduxFormSelect';
 import ReduxFormCheckbox from './ReduxFormCheckbox';
 import RadioGroup from './RadioGroup';
-import { saveForm, setFormSubmittingFlag, handleReset, onProductTypeChange } from './UserActions';
+import { saveForm, setFormSubmittingFlag, handleReset, onProductTypeChange, toggleModal } from './UserActions';
 import { get } from 'lodash';
 import { productList, requiredError, required, formatCurrency, normalizeAmount, isCheckboxValid, normalizeDate, number, formatDate, dateRequired } from './utils';
-import { Button, ButtonToolbar, ControlLabel } from 'react-bootstrap';
+import { Button, ButtonToolbar, ControlLabel, Modal } from 'react-bootstrap';
 import FilePondEx from './FilePondEx';
 import ComboDatePicker from './ComboDatePicker';
 import '../css/userForm.css';
@@ -22,6 +22,10 @@ const onSubmit = (values, dispatch) => {
 
 const onSubmitFail = (errors, dispatch) => {
     dispatch(setFormSubmittingFlag(false));
+};
+
+const closeModal = (dispatch) => {
+    dispatch(toggleModal(false));
 };
 
 const getProductSizes = (productSizes) => {
@@ -37,7 +41,7 @@ const getProductSizes = (productSizes) => {
 
 export class OtherDetailsForm extends Component {
     render() {
-        const { handleSubmit, pristine, submitting, disableSubmit, handleReset, productType, productSize, onProductTypeChange, productSizes, isReceiveEmails, isTC } = this.props;
+        const { handleSubmit, pristine, submitting, disableSubmit, handleReset, productType, productSize, onProductTypeChange, productSizes, isReceiveEmails, isTC, showModal, toggleModal } = this.props;
         return (
             <Fragment>
                 <form onSubmit={handleSubmit}>
@@ -204,6 +208,22 @@ export class OtherDetailsForm extends Component {
                         </div>
                     </FormSection>
                     <div>
+                        <a href="#" onClick={() => { toggleModal(true); }}>
+                            Mattress Description
+                        </a>
+                        <Modal show={showModal} onHide={() => { toggleModal(false); }}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>A Mattress Like No Other</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <p>From the moment you lie down until the moment you rise, every Tempur-Pedic mattress responds to your body's shape, weight, and temperature with up to 2x more pressure-relieving power+ than any other brand.</p>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button onClick={() => { toggleModal(false); }}>Close</Button>
+                            </Modal.Footer>
+                        </Modal>
+                    </div>
+                    <div>
                         <ButtonToolbar>
                             {disableSubmit && (<Link
                                 to="/details"
@@ -227,6 +247,7 @@ const mapStateToProps = (state) => ({
     productSizes: get(state, 'user.sizes'),
     isReceiveEmails: selector(state, 'isReceiveEmails'),
     isTC: selector(state, 'isTC'),
+    showModal: get(state, 'user.modal', false),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -234,6 +255,7 @@ const mapDispatchToProps = dispatch => ({
     setFormSubmittingFlag: val => dispatch(setFormSubmittingFlag(val)),
     handleReset: (name) => dispatch(handleReset(name)),
     onProductTypeChange: (type, newVal) => dispatch(onProductTypeChange(type, newVal)),
+    toggleModal: val => dispatch(toggleModal(val)),
 });
 
 const OtherDetailsContainer = connect(mapStateToProps, mapDispatchToProps)(reduxForm({

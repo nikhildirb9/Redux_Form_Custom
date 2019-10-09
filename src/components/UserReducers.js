@@ -1,4 +1,4 @@
-import { FORM_SUBMITTED_FLAG, RECEIVE_REGISTRATION_DETAILS, GET_SUBMISSION_DETAILS, FETCH_PRODUCT_SIZES, GET_FILE_UPDATE, SUBMIT_DETAILS } from './UserActions';
+import { FORM_SUBMITTED_FLAG, RECEIVE_REGISTRATION_DETAILS, GET_SUBMISSION_DETAILS, FETCH_PRODUCT_SIZES, GET_FILE_UPDATE, SUBMIT_DETAILS, TOGGLE_MODAL } from './UserActions';
 
 const initialUserForm = {
     disableSubmit: false,
@@ -9,6 +9,7 @@ const initialUserForm = {
     isFetching: {
         details: false,
     },
+    modal: false,
 };
 
 export const user = (state = initialUserForm, action) => {
@@ -25,6 +26,11 @@ export const user = (state = initialUserForm, action) => {
             return {
                 ...state,
                 disableSubmit: action.payload,
+            };
+        case TOGGLE_MODAL:
+            return {
+                ...state,
+                modal: action.payload,
             };
         case RECEIVE_REGISTRATION_DETAILS: {
             return {
