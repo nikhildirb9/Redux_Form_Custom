@@ -12,6 +12,7 @@ import { productList, requiredError, required, formatCurrency, normalizeAmount, 
 import { Button, ButtonToolbar, ControlLabel, Modal } from 'react-bootstrap';
 import FilePondEx from './FilePondEx';
 import ComboDatePicker from './ComboDatePicker';
+import ReduxDateTimePicker from './ReduxDateTimePicker';
 import '../css/userForm.css';
 
 const selector = formValueSelector('otherDetailsForm');
@@ -103,6 +104,17 @@ export class OtherDetailsForm extends Component {
                                     invalid: 'invalid date'
                                 }}
                                 normalize={normalizeDate}
+                            />
+                        </div>
+                        <div>
+                            <Field
+                                label="Return Date"
+                                name="returnDate"
+                                component={ReduxDateTimePicker}
+                                validate={[required]}
+                                errorMessage={requiredError}
+                                showTime={false}
+                                dateFormat="DD MMM YYYY"
                             />
                         </div>
                         <div>
