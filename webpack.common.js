@@ -42,5 +42,10 @@ module.exports = {
     },
     resolve: {
         extensions: ['.js', '.jsx'],
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            _domainUrl_: JSON.stringify('https://localhost:3000'),
+        }),
+    ],
 };
